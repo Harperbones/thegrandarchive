@@ -1,0 +1,144 @@
+:root {
+    --bg: #121212;
+    --panel: #1e1811;
+    --gold: #b28e37;
+    --paper: #fcfaf7;
+    --ink: #1a1510;
+    --serif: Constantia, "Lucida Bright", Georgia, serif;
+}
+
+body { 
+    background-color: var(--bg); 
+    color: var(--paper); 
+    font-family: var(--serif); 
+    margin: 0; 
+    overflow-x: hidden;
+}
+
+/* Header & Logo */
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: #000;
+    border-bottom: 2px solid var(--gold);
+}
+
+.logo {
+    font-size: 2.5em;
+    color: var(--gold);
+    text-shadow: rgb(80, 40, 0) 3px -3px 10px;
+    letter-spacing: 5px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--paper);
+    cursor: pointer;
+    font-family: var(--serif);
+    font-size: 1.1em;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.nav-btn:hover { color: var(--gold); }
+
+/* Layout Sections */
+.site-section { display: none; padding: 40px; }
+.site-section.active { display: block !important; }
+
+/* Archive Gallery */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.char-card {
+    background: var(--panel);
+    border: 1px solid var(--gold);
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(147, 59, 39, 0.4);
+}
+
+.card-content { cursor: pointer; }
+.card-content img { width: 100%; height: 300px; object-fit: cover; filter: sepia(0.4); border-bottom: 1px solid var(--gold); }
+
+.card-btns { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
+.card-btns button { background: none; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 5px 10px; font-family: var(--serif); }
+.card-btns button:hover { background: var(--gold); color: black; }
+
+/* Registration Form & Preview Fix */
+.form-container { max-width: 600px; margin: 0 auto; background: var(--panel); padding: 40px; border: 1px solid var(--gold); }
+
+.preview-frame {
+    width: 200px;
+    height: 250px;
+    border: 5px solid var(--ink);
+    outline: 1px solid var(--gold);
+    margin: 0 auto 20px;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.custom-upload-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: linear-gradient(145deg, #2d241d, #1a1510);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    cursor: pointer;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #0a0a0a; border: 1px solid #444; color: var(--paper); font-family: var(--serif); }
+.gold-btn { background: var(--gold); color: black; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: var(--serif); }
+
+/* Dossier Modal & Scrolling Fix */
+.modal-overlay { 
+    display: none; position: fixed; top: 0; left: 0; 
+    width: 100%; height: 100%; background: rgba(0,0,0,0.9); 
+    z-index: 1000; justify-content: center; align-items: center; 
+}
+
+.dossier-sheet { 
+    background-color: var(--paper); color: var(--ink); 
+    width: 90%; max-width: 950px; height: 85vh; 
+    padding: 50px; box-shadow: 0px 0px 30px 5px rgb(147, 59, 39); 
+    position: relative; overflow: hidden; 
+}
+
+.sheet-layout { display: grid; grid-template-columns: 300px 1fr; gap: 40px; height: 100%; }
+
+.ornate-frame { border: 12px solid var(--ink); outline: 2px solid var(--gold); height: 400px; }
+.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.ornate-h1 { font-size: 3.5rem; margin: 0; text-shadow: #502800 2px 2px 4px; }
+.ornate-h2 { font-style: italic; color: #502800; margin-top: 10px; }
+.gold-hr { border: 1px solid var(--gold); margin: 20px 0; }
+
+/* THE SCROLL BOX */
+.scroll-box {
+    height: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.sheet-p { line-height: 1.6; font-size: 1.15rem; white-space: pre-wrap; margin-top: 0; }
+
+/* Custom Brass Scrollbar */
+.scroll-box::-webkit-scrollbar { width: 10px; }
+.scroll-box::-webkit-scrollbar-track { background: #e0d4c3; border-radius: 5px; }
+.scroll-box::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--gold), #502800); border: 2px solid var(--paper); border-radius: 5px; }
+
+.close-btn { position: absolute; top: 10px; right: 20px; font-size: 2.5rem; background: none; border: none; cursor: pointer; color: var(--ink); }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>The Archive | Character Portal</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+
+<header class="main-nav">
+    <div class="logo">THE ARCHIVE</div>
+    <nav>
+        <button class="nav-btn" onclick="showSection('gallery')">My Archive</button>
+        <button class="nav-btn" onclick="showSection('submit')">Register OC</button>
+    </nav>
+</header>
+
+<main>
+    <section id="gallery" class="site-section active">
+        <div class="gallery-grid" id="character-hub"></div>
+    </section>
+
+    <section id="submit" class="site-section">
+        <div class="form-container">
+            <h2 id="form-title">New Entry Registration</h2>
+            <form id="oc-form">
+                <input type="hidden" id="editing-id" value="">
+                
+                <div class="upload-zone">
+                    <label for="new-portrait" class="custom-upload-btn">📜 Affix Portrait Art</label>
+                    <input type="file" id="new-portrait" accept="image/*" style="display:none">
+                    
+                    <div class="preview-frame">
+                        <img id="form-preview" src="michelangelo.jpg">
+                    </div>
+                </div>
+
+                <input type="text" id="new-name" placeholder="Character Name" required>
+                <input type="text" id="new-class" placeholder="Class / Specialty">
+                <textarea id="new-bio" placeholder="Brief history..."></textarea>
+                
+                <div class="form-controls">
+                    <button type="submit" class="gold-btn" id="submit-btn">Seal Record</button>
+                    <button type="button" class="cancel-btn" onclick="showSection('gallery')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div id="dossier-overlay" class="modal-overlay" onclick="closeDossier()">
+        <div class="dossier-sheet" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeDossier()">×</button>
+            <div class="sheet-layout">
+                <div class="portrait-column">
+                    <div class="ornate-frame">
+                        <img id="view-img" src="">
+                    </div>
+                    <h2 id="view-class" class="ornate-h2">Class</h2>
+                </div>
+                <div class="text-column">
+                    <h1 id="view-name" class="ornate-h1">Name</h1>
+                    <hr class="gold-hr">
+                    <h3>Operational History</h3>
+                    <div class="scroll-box">
+                        <p id="view-bio" class="sheet-p"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
