@@ -1,119 +1,59 @@
-let characters = JSON.parse(localStorage.getItem('user_archive')) || [];
-let currentImageData = "michelangelo.jpg";
-
-function showSection(id) {
-    document.querySelectorAll('.site-section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+:root {
+    --bg: #121212;
+    --panel: #1e1811;
+    --gold: #b28e37;
+    --paper: #fcfaf7;
+    --ink: #1a1510;
+    --serif: Constantia, "Lucida Bright", Georgia, serif;
 }
 
-document.getElementById('new-portrait').addEventListener('change', function(e) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        currentImageData = event.target.result;
-        document.getElementById('form-preview').src = currentImageData;
-    };
-    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-});
+body { background-color: var(--bg); color: var(--paper); font-family: var(--serif); margin: 0; overflow-x: hidden; }
 
-function renderGallery() {
-    const hub = document.getElementById('character-hub');
-    hub.innerHTML = characters.length === 0 ? "<p style='grid-column: 1/-1; text-align: center; opacity: 0.5;'>The Archive is empty...</p>" : "";
+/* Existing Header Styles */
+.main-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #000; border-bottom: 2px solid var(--gold); }
+.logo { font-size: 2.5em; color: var(--gold); text-shadow: rgb(80, 40, 0) 3px -3px 10px; letter-spacing: 5px; }
+.nav-btn { background: transparent; border: none; color: var(--paper); cursor: pointer; font-family: var(--serif); font-size: 1.1em; margin-left: 20px; transition: color 0.3s; }
+.nav-btn:hover { color: var(--gold); }
 
-    characters.forEach((char, index) => {
-        const card = document.createElement('div');
-        card.className = 'char-card';
-        card.innerHTML = `
-            <div class="card-content" onclick="openDossier(${index})">
-                <img src="${char.img}">
-                <h3>${char.name}</h3>
-            </div>
-            <div class="card-btns">
-                <button onclick="prepareEdit(${index})">Edit</button>
-                <button onclick="deleteChar(${index})">Delete</button>
-            </div>
-        `;
-        hub.appendChild(card);
-    });
-}
+/* Layout Grid */
+.site-section { display: none; padding: 40px; }
+.site-section.active { display: block !important; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
 
-function openDossier(index) {
-    const char = characters[index];
-    document.getElementById('view-name').innerText = char.name;
-    document.getElementById('view-class').innerText = char.class;
-    document.getElementById('view-bio').innerText = char.bio;
-    document.getElementById('view-img').src = char.img;
+/* Registration Form Enhancements */
+.form-container { max-width: 800px; margin: 0 auto; background: var(--panel); padding: 40px; border: 1px solid var(--gold); }
+.form-flex-row { display: flex; gap: 30px; }
+.stat-input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.mood-grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    // Load Stats
-    document.getElementById('view-str').innerText = char.stats?.str || "-";
-    document.getElementById('view-dex').innerText = char.stats?.dex || "-";
-    document.getElementById('view-con').innerText = char.stats?.con || "-";
-    document.getElementById('view-int').innerText = char.stats?.int || "-";
-    document.getElementById('view-wis').innerText = char.stats?.wis || "-";
-    document.getElementById('view-cha').innerText = char.stats?.cha || "-";
+/* Triple Column Dossier */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+.dossier-sheet { background-color: var(--paper); color: var(--ink); width: 95%; max-width: 1200px; height: 88vh; padding: 40px; box-shadow: 0px 0px 30px 5px rgb(147, 59, 39); position: relative; overflow: hidden; }
 
-    // Load Spotify
-    const spotifyContainer = document.getElementById('spotify-container');
-    if (char.spotify) {
-        const embedUrl = char.spotify.replace("/track/", "/embed/track/").replace("/playlist/", "/embed/playlist/");
-        spotifyContainer.innerHTML = `<iframe src="${embedUrl}" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
-    } else {
-        spotifyContainer.innerHTML = `<div style="color:var(--gold); text-align:center; padding-top:60px; font-size:0.8rem;">SILENCE</div>`;
-    }
+.triple-layout { display: grid; grid-template-columns: 280px 1fr 280px; gap: 30px; height: 100%; }
 
-    // Update Mood Board
-    const moodFrame = document.getElementById('mood-iframe');
-    moodFrame.contentWindow.postMessage({ images: char.moods }, "*");
+.col-left, .col-right { border-right: 1px solid #ddd; padding-right: 10px; }
+.col-right { border-right: none; border-left: 1px solid #ddd; padding-left: 10px; padding-right: 0; }
 
-    document.getElementById('dossier-overlay').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; 
-}
+.ornate-frame { border: 12px solid var(--ink); outline: 2px solid var(--gold); height: 350px; }
+.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-function closeDossier() {
-    document.getElementById('dossier-overlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
+/* Stats Display */
+.stat-box-display { margin-top: 20px; }
+.stat-box-display h3 { font-size: 0.8rem; letter-spacing: 2px; color: var(--gold); border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+.stat-line { display: flex; justify-content: space-between; font-family: monospace; border-bottom: 1px dotted #ccc; margin-bottom: 5px; }
 
-document.getElementById('oc-form').onsubmit = function(e) {
-    e.preventDefault();
-    const id = document.getElementById('editing-id').value;
-    const charData = {
-        name: document.getElementById('new-name').value,
-        class: document.getElementById('new-class').value,
-        bio: document.getElementById('new-bio').value,
-        img: currentImageData,
-        spotify: document.getElementById('new-spotify').value,
-        moods: [
-            document.getElementById('m-url1').value,
-            document.getElementById('m-url2').value,
-            document.getElementById('m-url3').value,
-            document.getElementById('m-url4').value
-        ],
-        stats: {
-            str: document.getElementById('in-str').value,
-            dex: document.getElementById('in-dex').value,
-            con: document.getElementById('in-con').value,
-            int: document.getElementById('in-int').value,
-            wis: document.getElementById('in-wis').value,
-            cha: document.getElementById('in-cha').value
-        }
-    };
+/* Center Bio */
+.ornate-h1 { font-size: 3rem; margin: 0; text-shadow: #502800 2px 2px 4px; }
+.scroll-box { height: 100%; max-height: 450px; overflow-y: auto; padding-right: 15px; }
 
-    if (id !== "") characters[id] = charData;
-    else characters.push(charData);
+/* Right Sidebar Sections */
+.sidebar-title { font-size: 0.7rem; letter-spacing: 1px; color: var(--gold); margin-bottom: 5px; border-bottom: 1px solid var(--gold); }
+#mood-iframe { width: 100%; height: 200px; border: 1px solid var(--gold); background: #000; }
+#spotify-container { height: 152px; background: #000; border: 1px solid var(--gold); margin-top: 5px; }
 
-    localStorage.setItem('user_archive', JSON.stringify(characters));
-    this.reset();
-    document.getElementById('form-preview').src = "michelangelo.jpg";
-    showSection('gallery');
-    renderGallery();
-};
+/* Buttons */
+.gold-btn { background: var(--gold); color: black; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: var(--serif); }
+.gold-btn-small { background: var(--ink); color: var(--gold); border: 1px solid var(--gold); width: 100%; padding: 8px; cursor: pointer; margin-top: 10px; font-family: var(--serif); }
 
-function deleteChar(index) {
-    if(confirm("Purge this record?")) {
-        characters.splice(index, 1);
-        localStorage.setItem('user_archive', JSON.stringify(characters));
-        renderGallery();
-    }
-}
-
-window.onload = renderGallery;
+.close-btn { position: absolute; top: 10px; right: 20px; font-size: 2.5rem; background: none; border: none; cursor: pointer; color: var(--ink); }
