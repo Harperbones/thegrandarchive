@@ -20,6 +20,14 @@
     </div>
 </header>
 
+<div class="audio-controller">
+    <div class="gramophone-icon" onclick="toggleAudio()">📻</div>
+    <div id="global-player-box">
+        <iframe id="bg-spotify" src="" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+    <button class="audio-toggle" onclick="toggleAudio()">Hide Player</button>
+</div>
+
 <main class="main-container">
     <section id="gallery" class="site-section active">
         <div class="archive-header">
@@ -39,12 +47,12 @@
                         <input type="file" id="new-portrait" accept="image/*" style="display:none">
                     </div>
                     <div class="input-column">
-                        <input type="text" id="new-name" class="regal-input" placeholder="Name" required>
-                        <input type="text" id="new-class" class="regal-input" placeholder="Category (SCP, D&D, etc)">
-                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Link">
+                        <input type="text" id="new-name" class="regal-input" placeholder="Full Name" required>
+                        <input type="text" id="new-class" class="regal-input" placeholder="Category (SCP, D&D, Mabinogi)">
+                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Track/Playlist Link">
                         <div class="stat-input-grid">
                             <input type="number" id="in-str" placeholder="STR"><input type="number" id="in-dex" placeholder="DEX">
-                            <input type="number" id="in-con" placeholder="CON"><input type="number" id="in-int" placeholder="INT">
+                            <input type="number" id="in-int" placeholder="INT"><input type="number" id="in-cha" placeholder="CHA">
                         </div>
                         <div class="mood-inputs">
                             <input type="text" id="new-mood1" class="regal-input" placeholder="Mood Image URL 1">
@@ -52,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <textarea id="new-bio" class="regal-textarea" placeholder="Biography..."></textarea>
+                <textarea id="new-bio" class="regal-textarea" placeholder="Detailed History..."></textarea>
                 <div class="form-footer">
                     <button type="submit" class="seal-btn">SEAL RECORD</button>
                     <button type="button" class="cancel-btn" onclick="showSection('gallery')">Discard</button>
@@ -72,6 +80,7 @@
                         <div class="stat-row"><span>STR</span><b id="view-str">-</b></div>
                         <div class="stat-row"><span>DEX</span><b id="view-dex">-</b></div>
                         <div class="stat-row"><span>INT</span><b id="view-int">-</b></div>
+                        <div class="stat-row"><span>CHA</span><b id="view-cha">-</b></div>
                     </div>
                 </div>
                 <div class="dossier-col-center">
@@ -86,8 +95,10 @@
                             <iframe id="mood-iframe" src="moodboard.html"></iframe>
                         </div>
                     </div>
-                    <div id="spotify-container"></div>
-                    <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT</button>
+                    <div class="links-section">
+                        <h3>REGISTRY ACCESS</h3>
+                        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT</button>
+                    </div>
                 </div>
             </div>
         </div>
