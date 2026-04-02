@@ -2,124 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>THE GRAND ARCHIVE | Registry</title>
+    <title>The Archive | Character Portal</title>
     <link href="style.css" rel="stylesheet" />
 </head>
 <body>
-
-<header class="royal-header">
-    <div class="header-content">
-        <div class="logo-group">
-            <h1 class="main-logo">THE GRAND ARCHIVE</h1>
-            <p class="subtitle">Official Registry of Anomalies & Legends</p>
-        </div>
-        <nav class="royal-nav">
-            <a href="#" class="nav-link" onclick="showSection('gallery')">The Gallery</a>
-            <a href="#" class="nav-link" onclick="showSection('submit')">New Registration</a>
-            <a href="https://scp-wiki.wikidot.com/" target="_blank" class="nav-link external">Foundation ↗</a>
+    <header class="main-nav">
+        <div class="logo">THE ARCHIVE</div>
+        <nav>
+            <button class="nav-btn" onclick="showSection('gallery')">My Archive</button>
+            <button class="nav-btn" onclick="showSection('submit')">Register OC</button>
         </nav>
-    </div>
-</header>
+    </header>
 
-<main class="main-container">
-    <section id="gallery" class="site-section active">
-        <div class="archive-header">
-            <input type="text" id="archive-search" class="regal-search" placeholder="Search the collection..." onkeyup="searchArchive()">
-        </div>
-        <div class="gallery-grid" id="character-hub"></div>
-    </section>
+    <main>
+        <section id="gallery" class="site-section active">
+            <div class="gallery-grid" id="character-hub"></div>
+        </section>
 
-    <section id="submit" class="site-section">
-        <div class="royal-form-container">
-            <form id="oc-form">
-                <input type="hidden" id="editing-id" value="">
-                
-                <div class="form-layout">
-                    <div class="upload-column">
-                        <div class="preview-frame"><img id="form-preview" src="michelangelo.jpg"></div>
-                        <label for="new-portrait" class="custom-upload-btn">📜 Affix Art</label>
-                        <input type="file" id="new-portrait" accept="image/*" style="display:none">
-                    </div>
+        <section id="submit" class="site-section">
+            <div class="form-container">
+                <h2 id="form-title">New Entry Registration</h2>
+                <form id="oc-form">
+                    <input type="hidden" id="editing-id" value="">
+                    
+                    <div class="form-flex-row">
+                        <div class="upload-zone">
+                            <label for="new-portrait" class="custom-upload-btn">📜 Affix Portrait Art</label>
+                            <input type="file" id="new-portrait" accept="image/*" style="display:none">
+                            <div class="preview-frame"><img id="form-preview" src="michelangelo.jpg"></div>
+                        </div>
 
-                    <div class="input-column">
-                        <input type="text" id="new-name" class="regal-input" placeholder="Full Designation" required>
-                        <input type="text" id="new-class" class="regal-input" placeholder="Category (e.g. SCP, D&D)">
-                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Track/Playlist Link">
-                        
-                        <div class="stat-input-grid">
-                            <input type="number" id="in-str" placeholder="STR"><input type="number" id="in-dex" placeholder="DEX">
-                            <input type="number" id="in-con" placeholder="CON"><input type="number" id="in-int" placeholder="INT">
-                            <input type="number" id="in-wis" placeholder="WIS"><input type="number" id="in-cha" placeholder="CHA">
+                        <div class="basic-info">
+                            <input type="text" id="new-name" placeholder="Character Name" required>
+                            <input type="text" id="new-class" placeholder="Class / Specialty">
+                            <input type="text" id="new-spotify" placeholder="Spotify URL (Song/Playlist)">
+                            
+                            <div class="stat-input-grid">
+                                <input type="number" id="in-str" placeholder="STR">
+                                <input type="number" id="in-dex" placeholder="DEX">
+                                <input type="number" id="in-con" placeholder="CON">
+                                <input type="number" id="in-int" placeholder="INT">
+                                <input type="number" id="in-wis" placeholder="WIS">
+                                <input type="number" id="in-cha" placeholder="CHA">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="mood-input-group">
-                    <p>Mood Board URLs (4 Images)</p>
-                    <div class="form-row">
-                        <input type="text" id="m-url1" class="regal-input" placeholder="Img 1">
-                        <input type="text" id="m-url2" class="regal-input" placeholder="Img 2">
-                        <input type="text" id="m-url3" class="regal-input" placeholder="Img 3">
-                        <input type="text" id="m-url4" class="regal-input" placeholder="Img 4">
-                    </div>
-                </div>
-
-                <textarea id="new-bio" class="regal-textarea" placeholder="Detailed History..."></textarea>
-                
-                <div class="form-footer">
-                    <button type="submit" class="seal-btn">SEAL RECORD</button>
-                    <button type="button" class="cancel-btn" onclick="showSection('gallery')">Discard</button>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <div id="dossier-overlay" class="modal-overlay" onclick="closeDossier()">
-        <div class="dossier-sheet" onclick="event.stopPropagation()">
-            <button class="close-top" onclick="closeDossier()">✕</button>
-            
-            <div class="dossier-layout-triple">
-                <div class="dossier-col-left">
-                    <div class="ornate-frame"><img id="view-img" src=""></div>
-                    <div class="stat-block-regal">
-                        <h3>ATTRIBUTES</h3>
-                        <div class="stat-row"><span>STR</span><b id="view-str">-</b></div>
-                        <div class="stat-row"><span>DEX</span><b id="view-dex">-</b></div>
-                        <div class="stat-row"><span>CON</span><b id="view-con">-</b></div>
-                        <div class="stat-row"><span>INT</span><b id="view-int">-</b></div>
-                        <div class="stat-row"><span>WIS</span><b id="view-wis">-</b></div>
-                        <div class="stat-row"><span>CHA</span><b id="view-cha">-</b></div>
-                    </div>
-                </div>
-
-                <div class="dossier-col-center">
-                    <h2 id="view-class" class="class-label">CLASSIFICATION</h2>
-                    <h1 id="view-name" class="name-header">NAME</h1>
-                    <hr class="gold-hr">
-                    <div class="scroll-area-regal">
-                        <p id="view-bio" class="bio-text"></p>
-                    </div>
-                </div>
-
-                <div class="dossier-col-right">
-                    <div class="mood-section">
-                        <h3>AESTHETIC ARCHIVE</h3>
-                        <iframe id="mood-iframe" src="moodboard.html" frameborder="0"></iframe>
+                    <div class="mood-input-zone">
+                        <p style="color:var(--gold); font-size:0.8rem; margin-top:10px;">Mood Board Image URLs (4)</p>
+                        <div class="mood-grid-inputs">
+                            <input type="text" id="m-url1" placeholder="Image URL 1">
+                            <input type="text" id="m-url2" placeholder="Image URL 2">
+                            <input type="text" id="m-url3" placeholder="Image URL 3">
+                            <input type="text" id="m-url4" placeholder="Image URL 4">
+                        </div>
                     </div>
 
-                    <div class="vibe-section">
-                        <h3>SONIC SIGNATURE</h3>
-                        <div id="spotify-container"></div>
+                    <textarea id="new-bio" placeholder="Brief history..."></textarea>
+                    
+                    <div class="form-controls">
+                        <button type="submit" class="gold-btn" id="submit-btn">Seal Record</button>
+                        <button type="button" class="cancel-btn" onclick="showSection('gallery')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div id="dossier-overlay" class="modal-overlay" onclick="closeDossier()">
+            <div class="dossier-sheet" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="closeDossier()">×</button>
+                <div class="triple-layout">
+                    
+                    <div class="col-left">
+                        <div class="ornate-frame"><img id="view-img" src=""></div>
+                        <div class="stat-box-display">
+                            <h3>ATTRIBUTES</h3>
+                            <div class="stat-line"><span>STR</span><b id="view-str">-</b></div>
+                            <div class="stat-line"><span>DEX</span><b id="view-dex">-</b></div>
+                            <div class="stat-line"><span>CON</span><b id="view-con">-</b></div>
+                            <div class="stat-line"><span>INT</span><b id="view-int">-</b></div>
+                            <div class="stat-line"><span>WIS</span><b id="view-wis">-</b></div>
+                            <div class="stat-line"><span>CHA</span><b id="view-cha">-</b></div>
+                        </div>
                     </div>
 
-                    <div class="links-section">
-                        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT DATA</button>
+                    <div class="col-center">
+                        <h2 id="view-class" class="ornate-h2">Class</h2>
+                        <h1 id="view-name" class="ornate-h1">Name</h1>
+                        <hr class="gold-hr">
+                        <h3>Operational History</h3>
+                        <div class="scroll-box">
+                            <p id="view-bio" class="sheet-p"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-right">
+                        <div class="mood-wrapper">
+                            <h4 class="sidebar-title">AESTHETIC ARCHIVE</h4>
+                            <iframe id="mood-iframe" src="moodboard.html" frameborder="0"></iframe>
+                        </div>
+
+                        <div class="vibe-wrapper">
+                            <h4 class="sidebar-title">CHARACTER VIBE</h4>
+                            <div id="spotify-container"></div>
+                        </div>
+                        
+                        <div class="action-wrapper">
+                            <button class="gold-btn-small" onclick="shareCharacter()">Export Record</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
-<script src="script.js"></script>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
