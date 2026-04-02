@@ -80,4 +80,23 @@ function renderGallery() {
 
 function closeDossier() { document.getElementById('dossier-overlay').style.display = 'none'; }
 
+// This listens for when you select a file
+document.getElementById('new-portrait').addEventListener('change', function(e) {
+    const reader = new FileReader();
+    
+    reader.onload = function(event) {
+        // This updates the actual image source in your preview frame
+        const preview = document.getElementById('form-preview');
+        preview.src = event.target.result;
+        
+        // This saves the data to a variable so your "Seal Record" function can use it
+        currentImageData = event.target.result; 
+    };
+    
+    // This reads the file you just picked
+    if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
 window.onload = renderGallery;
