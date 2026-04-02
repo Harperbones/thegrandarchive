@@ -1,43 +1,64 @@
 let characters = JSON.parse(localStorage.getItem('user_archive')) || [];
-let currentImageData = "michelangelo.jpg"; 
+let currentImageData = "placeholder.jpg"; 
 
+// --- SECTION NAVIGATION ---
 function showSection(id) {
     document.querySelectorAll('.site-section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
 }
 
+// --- AUDIO CONTROLLER ---
 function toggleAudio() {
     document.querySelector('.audio-controller').classList.toggle('hidden');
 }
 
+// --- OPEN DOSSIER (VIEWING MODE) ---
 function openDossier(index) {
     const char = characters[index];
+    
+    // Identity & Portrait
     document.getElementById('view-name').innerText = char.name;
     document.getElementById('view-class').innerText = char.class || "UNCATEGORIZED";
     document.getElementById('view-bio').innerText = char.bio;
-    document.getElementById('view-img').src = char.img;
+    document.getElementById('view-img').src = char.img || 'placeholder.jpg';
     
-    // Stats
-    document.getElementById('view-str').innerText = char.stats?.str || "-";
-    document.getElementById('view-dex').innerText = char.stats?.dex || "-";
-    document.getElementById('view-int').innerText = char.stats?.int || "-";
-    document.getElementById('view-cha').innerText = char.stats?.cha || "-";
+    // NEW BIOGRAPHICAL DATA (Replacing Stats)
+    document.getElementById('view-age').innerText = char.age || "-";
+    document.getElementById('view-bday').innerText = char.birthday || "-";
+    document.getElementById('view-source').innerText = char.source || "-";
+    document.getElementById('view-extra').innerText = char.extra || "-";
 
-    // Moodboard Update
+    // Moodboard PostMessage Update
     const moodIframe = document.getElementById('mood-iframe');
-    moodIframe.contentWindow.postMessage({ images: [char.mood1, char.mood2] }, "*");
+    if (moodIframe && moodIframe.contentWindow) {
+        moodIframe.contentWindow.postMessage({ images: [char.mood1, char.mood2] }, "*");
+    }
 
-    // Spotify Global Update
-    if (char.spotify && char.spotify.includes('spotify.com')) {
-        const embedUrl = char.spotify.replace("/track/", "/embed/track/").replace("/playlist/", "/embed/playlist/");
-        document.getElementById('bg-spotify').src = `${embedUrl}?utm_source=generator&theme=0`;
+    // SPOTIFY PLAYLIST LOGIC
+    const player = document.getElementById('bg-spotify');
+    if (char.spotify && player) {
+        // Automatically converts standard links to Embed links
+        let embedUrl = char.spotify
+            .replace("open.spotify.com", "open.spotify.com/embed")
+            .split('?')[0]; // Removes tracking junk from the URL
+        
+        player.src = `${embedUrl}?utm_source=generator&theme=0`;
+    }
+
+    // Redact Button logic (Linked to this specific index)
+    const redactBtn = document.getElementById('redact-btn');
+    if (redactBtn) {
+        redactBtn.onclick = () => redactRecord(index);
     }
 
     document.getElementById('dossier-overlay').style.display = 'flex';
 }
 
+// --- SAVE RECORD (SUBMISSION MODE) ---
 document.getElementById('oc-form').onsubmit = function(e) {
     e.preventDefault();
+    
     const charData = {
         name: document.getElementById('new-name').value,
         class: document.getElementById('new-class').value,
@@ -46,22 +67,30 @@ document.getElementById('oc-form').onsubmit = function(e) {
         mood1: document.getElementById('new-mood1').value,
         mood2: document.getElementById('new-mood2').value,
         img: currentImageData,
-        stats: {
-            str: document.getElementById('in-str').value,
-            dex: document.getElementById('in-dex').value,
-            int: document.getElementById('in-int').value,
-            cha: document.getElementById('in-cha').value
-        }
+        // Saving the new bio fields
+        age: document.getElementById('in-age').value,
+        birthday: document.getElementById('in-bday').value,
+        source: document.getElementById('in-source').value,
+        extra: document.getElementById('in-extra').value
     };
+
     characters.push(charData);
     localStorage.setItem('user_archive', JSON.stringify(characters));
+    
+    // Reset Form & Return to Gallery
     this.reset();
+    currentImageData = "placeholder.jpg"; // Reset image tracker
+    document.getElementById('form-preview').src = "placeholder.jpg"; 
+    
     showSection('gallery');
     renderGallery();
 };
 
+// --- RENDER GALLERY CARDS ---
 function renderGallery() {
     const hub = document.getElementById('character-hub');
+    if (!hub) return;
+    
     hub.innerHTML = '';
     characters.forEach((char, index) => {
         const card = document.createElement('div');
@@ -69,7 +98,7 @@ function renderGallery() {
         card.onclick = () => openDossier(index);
         card.innerHTML = `
             <div class="card-content">
-                <img src="${char.img}">
+                <img src="${char.img || 'placeholder.jpg'}">
                 <h3>${char.name}</h3>
                 <p style="color:var(--gold)">${char.class || ''}</p>
             </div>
@@ -78,78 +107,50 @@ function renderGallery() {
     });
 }
 
-function closeDossier() { document.getElementById('dossier-overlay').style.display = 'none'; }
+// --- CLOSE OVERLAY ---
+function closeDossier() { 
+    document.getElementById('dossier-overlay').style.display = 'none'; 
+}
 
-// This listens for when you select a file
+// --- IMAGE UPLOAD PREVIEW ---
 document.getElementById('new-portrait').addEventListener('change', function(e) {
     const reader = new FileReader();
-    
-    reader.onload = function(event) {
-        // This updates the actual image source in your preview frame
-        const preview = document.getElementById('form-preview');
-        preview.src = event.target.result;
-        
-        // This saves the data to a variable so your "Seal Record" function can use it
-        currentImageData = event.target.result; 
-    };
-    
-    // This reads the file you just picked
     if (e.target.files[0]) {
+        reader.onload = function(event) {
+            document.getElementById('form-preview').src = event.target.result;
+            currentImageData = event.target.result; 
+        };
         reader.readAsDataURL(e.target.files[0]);
     }
 });
 
-// Function to delete (Redact) a record
+// --- PERMANENT REDACTION ---
 function redactRecord(index) {
-    if (confirm("Are you sure you wish to PERMANENTLY REDACT this file?")) {
-        characters.splice(index, 1); // Remove from array
-        localStorage.setItem('user_archive', JSON.stringify(characters)); // Update storage
+    if (confirm("Are you sure you wish to PERMANENTLY REDACT this file? This cannot be undone.")) {
+        characters.splice(index, 1);
+        localStorage.setItem('user_archive', JSON.stringify(characters));
         closeDossier();
-        renderGallery(); // Refresh the list
+        renderGallery();
     }
 }
 
-// Update your openDossier function slightly to pass the current index to the button
-function openDossier(index) {
-    const char = characters[index];
-    
-    // ... all your existing view-name, view-bio code ...
+// --- Inside openDossier(index) ---
+const player = document.getElementById('bg-spotify');
 
-    // Set the Redact button to point to this specific character's index
-    const redactBtn = document.getElementById('redact-btn');
-    if (redactBtn) {
-        redactBtn.onclick = () => redactRecord(index);
+if (char.spotify && player) {
+    let url = char.spotify;
+
+    // Convert standard links (open.spotify.com) to embed links
+    if (url.includes("open.spotify.com")) {
+        // This converts /track/, /playlist/, or /album/ into the /embed/ version
+        url = url.replace("/track/", "/embed/track/")
+                 .replace("/playlist/", "/embed/playlist/")
+                 .replace("/album/", "/embed/album/");
     }
 
-    document.getElementById('dossier-overlay').style.display = 'flex';
+    // Apply to player and add theme/source parameters
+    player.src = `${url}?utm_source=generator&theme=0`;
 }
 
-// The Instant Redaction Function
-function redactRecord(index) {
-    // 1. Remove the entry from the array immediately
-    characters.splice(index, 1);
-    
-    // 2. Overwrite the storage with the new, shorter list
-    localStorage.setItem('user_archive', JSON.stringify(characters));
-    
-    // 3. Wipe the screen clean
-    closeDossier();
-    renderGallery();
-}
-
-// Ensure the button is linked every time a dossier opens
-function openDossier(index) {
-    const char = characters[index];
-    
-    // ... (Your code to fill Name, Bio, Stats) ...
-
-    const redactBtn = document.getElementById('redact-btn');
-    if (redactBtn) {
-        // Direct assignment: Click -> Delete.
-        redactBtn.onclick = () => redactRecord(index);
-    }
-
-    document.getElementById('dossier-overlay').style.display = 'flex';
-}
-
+// Initialize the Gallery on Load
 window.onload = renderGallery;
