@@ -219,3 +219,59 @@ body {
 .site-section.active {
     display: block;
 }
+
+/* --- FORM PREVIEW LOGIC --- */
+
+/* This handles the 2-column layout for the upload area */
+.form-layout {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap; /* Allows stacking on mobile */
+    margin-bottom: 2rem;
+}
+
+.upload-column {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* The actual "Slot" for the image */
+.preview-frame {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border: 2px dashed var(--dark-gold); /* Dashed lines look like a placeholder */
+    background: rgba(0,0,0,0.3);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* The button that triggers the file upload */
+.custom-upload-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.custom-upload-btn:hover {
+    background: var(--gold);
+    color: #000;
+}
