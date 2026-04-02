@@ -82,14 +82,6 @@ body {
 }
 
 /* --- GALLERY GRID --- */
-.card-content img {
-    width: 100%;
-    height: 350px; /* Fixed Height to prevent giant images */
-    object-fit: cover; /* Keeps aspect ratio clean */
-    border: 1px solid var(--dark-gold);
-    margin-bottom: 15px;
-}
-
 .gallery-grid { 
     display: grid; 
     /* Cards scale from 100% width on mobile to 20rem on desktop */
@@ -121,7 +113,14 @@ body {
 }
 
 /* --- DOSSIER MODAL OVERLAY --- */
-.preview-frame img { width: 100%; height: 100%; object-fit: cover; }
+.card-content img {
+    width: 100%;
+    height: 350px; /* Fixed Height to prevent giant images */
+    object-fit: cover; /* Keeps aspect ratio clean */
+    border: 1px solid var(--dark-gold);
+    margin-bottom: 15px;
+}
+  
 .modal-overlay {
     display: none; 
     position: fixed;
@@ -218,6 +217,94 @@ body {
 
 .site-section.active {
     display: block;
+}
+
+/* --- THE DOSSIER AESTHETIC UPGRADE --- */
+
+.dossier-sheet {
+    background: #e0d5c1; /* Aged Paper / Parchment */
+    /* Subtle paper grain texture */
+    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); 
+    color: #1a1a1a; /* Ink-black text */
+    border: 12px solid #2b2b2b; /* Thick "Registry" border */
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+/* The "CLASSIFIED" Stamp flair */
+.dossier-sheet::after {
+    content: "REDACTION PENDING";
+    position: absolute;
+    bottom: 2rem;
+    right: -2rem;
+    transform: rotate(-15deg);
+    border: 3px solid rgba(147, 59, 39, 0.4);
+    color: rgba(147, 59, 39, 0.4);
+    font-family: 'Cinzel', serif;
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+/* High-Stakes Redact Button */
+.regal-btn-red {
+    width: 100%;
+    background: #631919; /* Dark crimson */
+    color: #fff;
+    border: 1px solid var(--gold);
+    padding: 0.8rem;
+    margin-top: 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.regal-btn-red:hover {
+    background: #a12525; /* Brightens on hover */
+    box-shadow: 0 0 15px rgba(161, 37, 37, 0.6);
+}
+
+/* Bio Text Styling (Ink on Paper look) */
+.bio-text {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-left: 3px solid #933b27;
+    padding-left: 1.5rem;
+    color: #2b2b2b;
+}
+
+.name-header {
+    font-size: 2.8rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #2b2b2b;
+    margin-bottom: 1rem;
+}
+
+/* High-Stakes Close Button (Matches Redact Style) */
+.regal-btn-close {
+    width: 100%;
+    background: #1a1a1a; /* Onyx Black */
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.8rem;
+    margin-top: 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.regal-btn-close:hover {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
+    transform: scale(1.02); /* Adds a tactile "pop" on hover */
 }
 
 /* --- FORM PREVIEW LOGIC --- */
