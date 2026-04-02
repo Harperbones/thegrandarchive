@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English&display=swap');
 
 :root {
     --gold: #c5a059;
@@ -39,3 +40,29 @@ body { background: var(--bg); color: var(--paper); font-family: 'IM Fell English
 .regal-input, .regal-textarea { width: 100%; background: #000; border: 1px solid var(--dark-gold); color: #fff; padding: 12px; margin-bottom: 10px; font-family: inherit; }
 .stat-input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 10px; }
 .seal-btn { background: var(--gold); color: #000; border: none; padding: 15px; width: 100%; font-family: 'Cinzel'; cursor: pointer; }
+
+/* --- CRITICAL SECTION MANAGEMENT --- */
+
+/* Hide all sections by default so they don't stack */
+.site-section {
+    display: none;
+}
+
+/* Only show the section currently in use (Gallery or Registration) */
+.site-section.active {
+    display: block;
+}
+
+/* Hide the Dossier Overlay until a character is clicked */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
