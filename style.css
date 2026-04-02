@@ -1,63 +1,42 @@
-/* --- GALLERY FIXES --- */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 40px;
-    padding: 20px;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English&display=swap');
+
+:root {
+    --gold: #c5a059;
+    --dark-gold: #8a6d3b;
+    --paper: #f4ece1;
+    --bg: #0d0d0d;
+    --panel: #1a1a1a;
+    --accent: #933b27;
 }
 
+body { background: var(--bg); color: var(--paper); font-family: 'IM Fell English', serif; margin: 0; }
+
+/* Audio Controller */
+.audio-controller {
+    position: fixed; bottom: 20px; right: 20px; width: 320px;
+    background: var(--panel); border: 1px solid var(--gold);
+    padding: 10px; display: flex; align-items: center; gap: 10px;
+    z-index: 2000; transition: 0.3s;
+}
+.audio-controller.hidden { transform: translateX(280px); }
+.audio-toggle { background: none; border: none; color: var(--gold); font-family: 'Cinzel'; font-size: 0.6rem; cursor: pointer; }
+
+/* Gallery Borders & Images */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 40px; }
 .char-card {
-    background: var(--panel);
-    border: 2px solid var(--gold); /* Restored the border */
-    padding: 15px;
-    text-align: center;
-    transition: 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    cursor: pointer;
+    background: var(--panel); border: 2px solid var(--gold);
+    padding: 15px; text-align: center; transition: 0.3s; cursor: pointer;
 }
+.char-card:hover { transform: translateY(-10px); box-shadow: 0 0 20px var(--gold); border-color: #fff; }
+.card-content img { width: 100%; height: 380px; object-fit: cover; border: 1px solid var(--dark-gold); }
 
-.char-card:hover {
-    transform: translateY(-10px);
-    border-color: #fff;
-    box-shadow: 0 0 20px var(--gold);
-}
+/* Dossier Layout */
+.dossier-layout-triple { display: grid; grid-template-columns: 280px 1fr 280px; gap: 30px; height: 100%; }
+.ornate-frame { border: 5px solid #2b2b2b; outline: 1px solid var(--gold); height: 350px; }
+.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
+.scroll-area-regal { height: 400px; overflow-y: auto; padding-right: 15px; border-top: 1px solid var(--gold); margin-top: 15px; }
 
-.card-content img {
-    width: 100%;
-    height: 350px; /* Fixed Height to prevent giant images */
-    object-fit: cover; /* Keeps aspect ratio clean */
-    border: 1px solid var(--dark-gold);
-    margin-bottom: 15px;
-}
-
-.card-content h3 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold);
-    margin: 10px 0 5px;
-    letter-spacing: 2px;
-}
-
-/* --- DOSSIER TRIPLE COLUMN --- */
-.dossier-layout-triple {
-    display: grid;
-    grid-template-columns: 280px 1fr 280px;
-    gap: 30px;
-    height: 100%;
-}
-
-.mood-frame {
-    width: 100%;
-    height: 220px;
-    border: 1px solid var(--gold);
-    background: #000;
-}
-
-#mood-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-/* Scrollbar styling */
-.scroll-area-regal::-webkit-scrollbar { width: 5px; }
-.scroll-area-regal::-webkit-scrollbar-thumb { background: var(--gold); }
+/* Registration Form */
+.regal-input, .regal-textarea { width: 100%; background: #000; border: 1px solid var(--dark-gold); color: #fff; padding: 12px; margin-bottom: 10px; font-family: inherit; }
+.stat-input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 10px; }
+.seal-btn { background: var(--gold); color: #000; border: none; padding: 15px; width: 100%; font-family: 'Cinzel'; cursor: pointer; }
