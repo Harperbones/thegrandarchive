@@ -99,4 +99,57 @@ document.getElementById('new-portrait').addEventListener('change', function(e) {
     }
 });
 
+// Function to delete (Redact) a record
+function redactRecord(index) {
+    if (confirm("Are you sure you wish to PERMANENTLY REDACT this file?")) {
+        characters.splice(index, 1); // Remove from array
+        localStorage.setItem('user_archive', JSON.stringify(characters)); // Update storage
+        closeDossier();
+        renderGallery(); // Refresh the list
+    }
+}
+
+// Update your openDossier function slightly to pass the current index to the button
+function openDossier(index) {
+    const char = characters[index];
+    
+    // ... all your existing view-name, view-bio code ...
+
+    // Set the Redact button to point to this specific character's index
+    const redactBtn = document.getElementById('redact-btn');
+    if (redactBtn) {
+        redactBtn.onclick = () => redactRecord(index);
+    }
+
+    document.getElementById('dossier-overlay').style.display = 'flex';
+}
+
+// The Instant Redaction Function
+function redactRecord(index) {
+    // 1. Remove the entry from the array immediately
+    characters.splice(index, 1);
+    
+    // 2. Overwrite the storage with the new, shorter list
+    localStorage.setItem('user_archive', JSON.stringify(characters));
+    
+    // 3. Wipe the screen clean
+    closeDossier();
+    renderGallery();
+}
+
+// Ensure the button is linked every time a dossier opens
+function openDossier(index) {
+    const char = characters[index];
+    
+    // ... (Your code to fill Name, Bio, Stats) ...
+
+    const redactBtn = document.getElementById('redact-btn');
+    if (redactBtn) {
+        // Direct assignment: Click -> Delete.
+        redactBtn.onclick = () => redactRecord(index);
+    }
+
+    document.getElementById('dossier-overlay').style.display = 'flex';
+}
+
 window.onload = renderGallery;
