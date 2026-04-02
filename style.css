@@ -1,43 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English&family=Playfair+Display:ital,wght@0,400;1,700&display=swap');
+let characters = JSON.parse(localStorage.getItem('user_archive')) || [];
+let currentImageData = "michelangelo.jpg";
 
-:root {
-    --gold: #c5a059;
-    --dark-gold: #8a6d3b;
-    --paper: #f4ece1;
-    --bg: #0d0d0d;
-    --panel: #1a1a1a;
-    --ink: #2b2b2b;
-    --accent: #933b27;
+function showSection(id) {
+    document.querySelectorAll('.site-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
-body { background: var(--bg); color: var(--paper); font-family: 'IM Fell English', serif; margin: 0; }
+document.getElementById('new-portrait').addEventListener('change', function(e) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        currentImageData = event.target.result;
+        document.getElementById('form-preview').src = currentImageData;
+    };
+    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+});
 
-.royal-header { background: #000; padding: 25px 5%; border-bottom: 2px solid var(--gold); }
-.main-logo { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; letter-spacing: 4px; }
-.royal-nav { display: flex; gap: 25px; margin-top: 15px; }
-.nav-link { color: var(--paper); text-decoration: none; font-family: 'Cinzel', serif; font-size: 0.8rem; }
+function renderGallery() {
+    const hub = document.getElementById('character-hub');
+    hub.innerHTML = characters.length === 0 ? "<p style='grid-column: 1/-1; text-align: center; opacity: 0.5;'>The Archive is empty...</p>" : "";
 
-.regal-search { width: 100%; max-width: 500px; background: transparent; border: none; border-bottom: 1px solid var(--gold); color: white; font-size: 1.2rem; display: block; margin: 40px auto; text-align: center; }
+    characters.forEach((char, index) => {
+        const card = document.createElement('div');
+        card.className = 'char-card';
+        card.innerHTML = `
+            <div class="card-content" onclick="openDossier(${index})">
+                <img src="${char.img}">
+                <h3>${char.name}</h3>
+            </div>
+            <div class="card-btns">
+                <button onclick="prepareEdit(${index})">Edit</button>
+                <button onclick="deleteChar(${index})">Delete</button>
+            </div>
+        `;
+        hub.appendChild(card);
+    });
+}
 
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 0 5%; }
-.char-card { background: var(--panel); border: 1px solid var(--gold); padding: 10px; cursor: pointer; transition: 0.3s; }
-.char-card img { width: 100%; height: 280px; object-fit: cover; }
+function openDossier(index) {
+    const char = characters[index];
+    document.getElementById('view-name').innerText = char.name;
+    document.getElementById('view-class').innerText = char.class;
+    document.getElementById('view-bio').innerText = char.bio;
+    document.getElementById('view-img').src = char.img;
 
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center; align-items: center; }
-.dossier-sheet { background: var(--paper); color: var(--ink); width: 92%; max-width: 1200px; height: 88vh; padding: 30px; position: relative; }
+    // Load Stats
+    document.getElementById('view-str').innerText = char.stats?.str || "-";
+    document.getElementById('view-dex').innerText = char.stats?.dex || "-";
+    document.getElementById('view-con').innerText = char.stats?.con || "-";
+    document.getElementById('view-int').innerText = char.stats?.int || "-";
+    document.getElementById('view-wis').innerText = char.stats?.wis || "-";
+    document.getElementById('view-cha').innerText = char.stats?.cha || "-";
 
-.dossier-layout-triple { display: grid; grid-template-columns: 260px 1fr 280px; gap: 30px; height: 100%; }
+    // Load Spotify
+    const spotifyContainer = document.getElementById('spotify-container');
+    if (char.spotify) {
+        const embedUrl = char.spotify.replace("/track/", "/embed/track/").replace("/playlist/", "/embed/playlist/");
+        spotifyContainer.innerHTML = `<iframe src="${embedUrl}" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+    } else {
+        spotifyContainer.innerHTML = `<div style="color:var(--gold); text-align:center; padding-top:60px; font-size:0.8rem;">SILENCE</div>`;
+    }
 
-.ornate-frame { border: 8px solid var(--ink); outline: 2px solid var(--gold); height: 320px; }
-.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
+    // Update Mood Board
+    const moodFrame = document.getElementById('mood-iframe');
+    moodFrame.contentWindow.postMessage({ images: char.moods }, "*");
 
-.stat-block-regal { margin-top: 20px; border-top: 1px solid var(--gold); }
-.stat-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px solid #ddd; margin-bottom: 5px; }
+    document.getElementById('dossier-overlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden'; 
+}
 
-.name-header { font-family: 'Cinzel', serif; font-size: 3.5rem; margin: 0; }
-.scroll-area-regal { height: 400px; overflow-y: auto; font-family: 'Playfair Display', serif; line-height: 1.6; }
+function closeDossier() {
+    document.getElementById('dossier-overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
 
-#mood-iframe { width: 100%; height: 200px; border: 1px solid var(--gold); }
-#spotify-container { height: 152px; background: #000; border: 1px solid var(--gold); margin: 10px 0; }
+document.getElementById('oc-form').onsubmit = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editing-id').value;
+    const charData = {
+        name: document.getElementById('new-name').value,
+        class: document.getElementById('new-class').value,
+        bio: document.getElementById('new-bio').value,
+        img: currentImageData,
+        spotify: document.getElementById('new-spotify').value,
+        moods: [
+            document.getElementById('m-url1').value,
+            document.getElementById('m-url2').value,
+            document.getElementById('m-url3').value,
+            document.getElementById('m-url4').value
+        ],
+        stats: {
+            str: document.getElementById('in-str').value,
+            dex: document.getElementById('in-dex').value,
+            con: document.getElementById('in-con').value,
+            int: document.getElementById('in-int').value,
+            wis: document.getElementById('in-wis').value,
+            cha: document.getElementById('in-cha').value
+        }
+    };
 
-.regal-btn-small { width: 100%; background: var(--ink); color: var(--gold); border: 1px solid var(--gold); padding: 10px; cursor: pointer; font-family: 'Cinzel'; margin-top: 10px; }
+    if (id !== "") characters[id] = charData;
+    else characters.push(charData);
+
+    localStorage.setItem('user_archive', JSON.stringify(characters));
+    this.reset();
+    document.getElementById('form-preview').src = "michelangelo.jpg";
+    showSection('gallery');
+    renderGallery();
+};
+
+function deleteChar(index) {
+    if(confirm("Purge this record?")) {
+        characters.splice(index, 1);
+        localStorage.setItem('user_archive', JSON.stringify(characters));
+        renderGallery();
+    }
+}
+
+window.onload = renderGallery;
