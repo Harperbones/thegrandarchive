@@ -5,62 +5,208 @@
     --bg: #0d0d0d;
     --panel: #1a1a1a;
     --accent: #933b27;
+    /* Responsive base unit */
+    --spacing-unit: 1rem; 
 }
 
-body { background: var(--bg); color: var(--paper); font-family: 'IM Fell English', serif; margin: 0; }
+/* Global Reset */
+* {
+    box-sizing: border-box;
+}
 
-/* Audio Controller */
+body { 
+    background: var(--bg); 
+    color: var(--paper); 
+    font-family: 'IM Fell English', serif; 
+    margin: 0; 
+    overflow-x: hidden;
+}
+
+/* --- HEADER & NAVIGATION --- */
+.royal-header {
+    background: linear-gradient(to bottom, #111, #000);
+    padding: 2rem 5vw;
+    border-bottom: 2px solid var(--gold);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.main-logo {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    margin: 0;
+    letter-spacing: 0.3rem;
+    font-size: clamp(1.5rem, 4vw, 3rem); /* Fluid typography */
+}
+
+.royal-nav { 
+    display: flex; 
+    gap: 2rem; 
+    margin-top: 1rem;
+}
+
+.nav-link {
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.nav-link:hover { color: var(--gold); }
+
+/* --- AUDIO CONTROLLER (GRAMOPHONE) --- */
 .audio-controller {
-    position: fixed; bottom: 20px; right: 20px; width: 320px;
-    background: var(--panel); border: 1px solid var(--gold);
-    padding: 10px; display: flex; align-items: center; gap: 10px;
-    z-index: 2000; transition: 0.3s;
+    position: fixed; 
+    bottom: 1.5rem; 
+    right: 1.5rem; 
+    width: min(90vw, 20rem); /* Fluid width that caps at 20rem */
+    background: var(--panel); 
+    border: 1px solid var(--gold);
+    padding: 0.75rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem;
+    z-index: 2000; 
+    transition: 0.3s ease-in-out;
 }
-.audio-controller.hidden { transform: translateX(280px); }
-.audio-toggle { background: none; border: none; color: var(--gold); font-family: 'Cinzel'; font-size: 0.6rem; cursor: pointer; }
 
-/* Gallery Borders & Images */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 40px; }
+.audio-controller.hidden { transform: translateX(calc(100% - 3rem)); }
+
+.audio-toggle { 
+    background: none; 
+    border: none; 
+    color: var(--gold); 
+    font-family: 'Cinzel'; 
+    font-size: 0.6rem; 
+    cursor: pointer; 
+}
+
+/* --- GALLERY GRID --- */
+.gallery-grid { 
+    display: grid; 
+    /* Cards scale from 100% width on mobile to 20rem on desktop */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); 
+    gap: 2.5rem; 
+    padding: 4vw; 
+}
+
 .char-card {
-    background: var(--panel); border: 2px solid var(--gold);
-    padding: 15px; text-align: center; transition: 0.3s; cursor: pointer;
-}
-.char-card:hover { transform: translateY(-10px); box-shadow: 0 0 20px var(--gold); border-color: #fff; }
-.card-content img { width: 100%; height: 380px; object-fit: cover; border: 1px solid var(--dark-gold); }
-
-/* Dossier Layout */
-.dossier-layout-triple { display: grid; grid-template-columns: 280px 1fr 280px; gap: 30px; height: 100%; }
-.ornate-frame { border: 5px solid #2b2b2b; outline: 1px solid var(--gold); height: 350px; }
-.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
-.scroll-area-regal { height: 400px; overflow-y: auto; padding-right: 15px; border-top: 1px solid var(--gold); margin-top: 15px; }
-
-/* Registration Form */
-.regal-input, .regal-textarea { width: 100%; background: #000; border: 1px solid var(--dark-gold); color: #fff; padding: 12px; margin-bottom: 10px; font-family: inherit; }
-.stat-input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 10px; }
-.seal-btn { background: var(--gold); color: #000; border: none; padding: 15px; width: 100%; font-family: 'Cinzel'; cursor: pointer; }
-
-/* --- CRITICAL SECTION MANAGEMENT --- */
-
-/* Hide all sections by default so they don't stack */
-.site-section {
-    display: none;
+    background: var(--panel); 
+    border: 2px solid var(--gold);
+    padding: 1rem; 
+    text-align: center; 
+    transition: 0.3s ease; 
+    cursor: pointer;
 }
 
-/* Only show the section currently in use (Gallery or Registration) */
-.site-section.active {
-    display: block;
+.char-card:hover { 
+    transform: translateY(-0.5rem); 
+    box-shadow: 0 0 20px var(--gold); 
+    border-color: #fff; 
 }
 
-/* Hide the Dossier Overlay until a character is clicked */
+.card-content img { 
+    width: 100%; 
+    aspect-ratio: 3 / 4; 
+    object-fit: cover; 
+    border: 1px solid var(--dark-gold); 
+}
+
+/* --- DOSSIER MODAL OVERLAY --- */
 .modal-overlay {
     display: none; 
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     background: rgba(0, 0, 0, 0.95);
     z-index: 10000;
     justify-content: center;
     align-items: center;
+}
+
+.dossier-sheet {
+    background: var(--paper);
+    color: #2b2b2b; /* Ink color */
+    width: 95vw;
+    max-width: 1200px;
+    height: 90vh;
+    padding: 2rem;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.dossier-layout-triple { 
+    display: grid; 
+    /* Sidebars collapse as screen gets smaller */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem; 
+    height: 100%; 
+    overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+    .dossier-layout-triple {
+        grid-template-columns: 280px 1fr 280px;
+        overflow: hidden;
+    }
+}
+
+.ornate-frame { 
+    border: 5px solid #2b2b2b; 
+    outline: 1px solid var(--gold); 
+    aspect-ratio: 3 / 4;
+}
+
+.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.scroll-area-regal { 
+    height: 100%; 
+    max-height: 400px;
+    overflow-y: auto; 
+    padding-right: 1rem; 
+    border-top: 1px solid var(--gold); 
+    margin-top: 1rem; 
+}
+
+/* --- REGISTRATION FORM --- */
+.royal-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.regal-input, .regal-textarea { 
+    width: 100%; 
+    background: #000; 
+    border: 1px solid var(--dark-gold); 
+    color: #fff; 
+    padding: 0.8rem; 
+    margin-bottom: 0.75rem; 
+    font-family: inherit; 
+}
+
+.stat-input-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+    gap: 0.5rem; 
+    margin-bottom: 1rem; 
+}
+
+.seal-btn { 
+    background: var(--gold); 
+    color: #000; 
+    border: none; 
+    padding: 1rem; 
+    width: 100%; 
+    font-family: 'Cinzel'; 
+    cursor: pointer; 
+    font-weight: bold;
+}
+
+/* --- SECTION MANAGEMENT --- */
+.site-section {
+    display: none;
+}
+
+.site-section.active {
+    display: block;
 }
