@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  
 <header class="royal-header">
     <div class="header-content">
         <div class="logo-group">
@@ -125,16 +126,19 @@
                     </div>
                     
                     <div class="links-section">
-                        <h3>REGISTRY ACCESS</h3>
-                        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT DATA</button>
-                        <button class="regal-btn-small" onclick="closeDossier()">✖ CLOSE FILE</button>
-                    </div>
+    <h3>ARCHIVE ACTIONS</h3>
+    <button class="regal-btn-close" onclick="closeDossier()">✖ CLOSE FILE</button>
+    
+    <button id="redact-btn" class="regal-btn-red">⚠️ REDACT RECORD</button>
+</div>
                 </div>
             </div>
         </div>
     </div>
+
 </main>
 
+  
 <script src="script.js"></script>
 </body>
 </html>
