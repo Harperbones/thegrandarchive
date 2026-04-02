@@ -1,114 +1,82 @@
 let characters = JSON.parse(localStorage.getItem('user_archive')) || [];
-let currentImageData = "michelangelo.jpg"; 
+let currentImageData = "michelangelo.jpg";
 
-// Section Toggle
 function showSection(id) {
     document.querySelectorAll('.site-section').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
-// File Upload to Base64
+// Image Handling
 document.getElementById('new-portrait').addEventListener('change', function(e) {
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = (event) => {
         currentImageData = event.target.result;
         document.getElementById('form-preview').src = currentImageData;
     };
-    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0]);
 });
 
-// Render Main Archive
 function renderGallery() {
     const hub = document.getElementById('character-hub');
     hub.innerHTML = '';
-    
-    if (characters.length === 0) {
-        hub.innerHTML = "<p style='grid-column: 1/-1; text-align: center; opacity: 0.5;'>The Archive is currently empty...</p>";
-    }
-
     characters.forEach((char, index) => {
         const card = document.createElement('div');
         card.className = 'char-card';
-        card.innerHTML = `
-            <div class="card-content" onclick="openDossier(${index})">
-                <img src="${char.img}">
-                <h3>${char.name}</h3>
-            </div>
-            <div class="card-btns">
-                <button onclick="prepareEdit(${index})">Edit</button>
-                <button onclick="shareCharacter(${index})">Share</button>
-                <button onclick="deleteChar(${index})">Delete</button>
-            </div>
-        `;
+        card.innerHTML = `<div onclick="openDossier(${index})"><img src="${char.img}"><h3>${char.name}</h3></div><button onclick="deleteChar(${index})">Purge</button>`;
         hub.appendChild(card);
     });
 }
 
-// Open Dossier View
 function openDossier(index) {
     const char = characters[index];
     document.getElementById('view-name').innerText = char.name;
-    document.getElementById('view-class').innerText = char.class;
+    document.getElementById('view-class').innerText = char.class || "UNCATEGORIZED";
     document.getElementById('view-bio').innerText = char.bio;
     document.getElementById('view-img').src = char.img;
+
+    // Stats
+    document.getElementById('view-str').innerText = char.stats?.str || "-";
+    document.getElementById('view-dex').innerText = char.stats?.dex || "-";
+    document.getElementById('view-con').innerText = char.stats?.con || "-";
+    document.getElementById('view-int').innerText = char.stats?.int || "-";
+    document.getElementById('view-wis').innerText = char.stats?.wis || "-";
+    document.getElementById('view-cha').innerText = char.stats?.cha || "-";
+
+    // Spotify
+    const spotify = document.getElementById('spotify-container');
+    if(char.spotify) {
+        const embed = char.spotify.replace("/track/", "/embed/track/").split('?')[0];
+        spotify.innerHTML = `<iframe src="${embed}" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+    }
+
+    // Mood Board Communication
+    const moodFrame = document.getElementById('mood-iframe');
+    moodFrame.contentWindow.postMessage({ images: char.moods }, "*");
+
     document.getElementById('dossier-overlay').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; 
 }
 
-function closeDossier() {
-    document.getElementById('dossier-overlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Form Handling
 document.getElementById('oc-form').onsubmit = function(e) {
     e.preventDefault();
-    const id = document.getElementById('editing-id').value;
     const charData = {
         name: document.getElementById('new-name').value,
         class: document.getElementById('new-class').value,
+        spotify: document.getElementById('new-spotify').value,
         bio: document.getElementById('new-bio').value,
-        img: currentImageData
+        img: currentImageData,
+        moods: [document.getElementById('m-url1').value, document.getElementById('m-url2').value, document.getElementById('m-url3').value, document.getElementById('m-url4').value],
+        stats: {
+            str: document.getElementById('in-str').value, dex: document.getElementById('in-dex').value,
+            con: document.getElementById('in-con').value, int: document.getElementById('in-int').value,
+            wis: document.getElementById('in-wis').value, cha: document.getElementById('in-cha').value
+        }
     };
-
-    if (id !== "") characters[id] = charData;
-    else characters.push(charData);
-
+    characters.push(charData);
     localStorage.setItem('user_archive', JSON.stringify(characters));
-    this.reset();
-    document.getElementById('editing-id').value = "";
-    document.getElementById('form-preview').src = "michelangelo.jpg";
-    document.getElementById('form-title').innerText = "New Entry Registration";
     showSection('gallery');
     renderGallery();
 };
 
-function prepareEdit(index) {
-    const char = characters[index];
-    document.getElementById('new-name').value = char.name;
-    document.getElementById('new-class').value = char.class;
-    document.getElementById('new-bio').value = char.bio;
-    document.getElementById('editing-id').value = index;
-    currentImageData = char.img;
-    document.getElementById('form-preview').src = char.img;
-    document.getElementById('form-title').innerText = "Update Record";
-    showSection('submit');
-}
-
-function deleteChar(index) {
-    if(confirm("Permanently incinerate this record?")) {
-        characters.splice(index, 1);
-        localStorage.setItem('user_archive', JSON.stringify(characters));
-        renderGallery();
-    }
-}
-
-function shareCharacter(index) {
-    const char = characters[index];
-    const charString = btoa(encodeURIComponent(JSON.stringify(char)));
-    const shareUrl = window.location.origin + window.location.pathname + "?view=" + charString;
-    navigator.clipboard.writeText(shareUrl);
-    alert("Record URL copied to clipboard!");
-}
-
+function closeDossier() { document.getElementById('dossier-overlay').style.display = 'none'; }
+function deleteChar(i) { characters.splice(i, 1); localStorage.setItem('user_archive', JSON.stringify(characters)); renderGallery(); }
 window.onload = renderGallery;
