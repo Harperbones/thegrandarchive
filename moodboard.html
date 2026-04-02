@@ -1,30 +1,18 @@
-<div class="dossier-col-right">
-    <div class="mood-section">
-        <h3>AESTHETIC ARCHIVE</h3>
-        <div class="mood-frame">
-            <img id="view-mood" src="parchment-texture.jpg">
-        </div>
-    </div>
-
-    <div class="vibe-section">
-        <h3>SONIC SIGNATURE</h3>
-        <div id="spotify-container">
-            <div class="music-placeholder">No Record Found</div>
-        </div>
-    </div>
-
-    <div class="curio-section">
-        <h3>CURIO CABINET</h3>
-        <ul id="view-items" class="item-list">
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-        </ul>
-    </div>
-
-    <div class="links-section">
-        <h3>REGISTRY ACCESS</h3>
-        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT DATA</button>
-        <button class="regal-btn-small" onclick="closeDossier()">✖ CLOSE FILE</button>
-    </div>
-</div>
+<!DOCTYPE html>
+<html>
+<body style="margin:0; background:#000; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; height:100vh; gap:2px;">
+    <img id="m1" style="width:100%; height:100%; object-fit:cover;">
+    <img id="m2" style="width:100%; height:100%; object-fit:cover;">
+    <img id="m3" style="width:100%; height:100%; object-fit:cover;">
+    <img id="m4" style="width:100%; height:100%; object-fit:cover;">
+    <script>
+        window.onmessage = (e) => {
+            if(e.data.images) {
+                e.data.images.forEach((url, i) => {
+                    if(url) document.getElementById('m' + (i+1)).src = url;
+                });
+            }
+        };
+    </script>
+</body>
+</html>
