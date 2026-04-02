@@ -1,13 +1,16 @@
+/* --- ROOT VARIABLES --- */
 :root {
     --gold: #c5a059;
     --dark-gold: #8a6d3b;
-    --paper: #f4ece1;
+    --paper: #e0d5c1; /* Aged Paper Color */
     --bg: #0d0d0d;
     --panel: #1a1a1a;
     --accent: #933b27;
-    /* Responsive base unit */
     --spacing-unit: 1rem; 
 }
+
+/* --- FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap');
 
 /* Global Reset */
 * {
@@ -35,7 +38,14 @@ body {
     color: var(--gold);
     margin: 0;
     letter-spacing: 0.3rem;
-    font-size: clamp(1.5rem, 4vw, 3rem); /* Fluid typography */
+    font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--dark-gold);
+    margin-top: 0.5rem;
 }
 
 .royal-nav { 
@@ -50,41 +60,52 @@ body {
     font-family: 'Cinzel', serif;
     font-size: 0.85rem;
     transition: 0.3s;
+    border-bottom: 1px solid transparent;
 }
 
-.nav-link:hover { color: var(--gold); }
+.nav-link:hover { 
+    color: var(--gold); 
+    border-bottom: 1px solid var(--gold);
+}
 
-/* --- AUDIO CONTROLLER (GRAMOPHONE) --- */
+/* --- AUDIO CONTROLLER --- */
 .audio-controller {
     position: fixed; 
     bottom: 1.5rem; 
     right: 1.5rem; 
-    width: min(90vw, 20rem); /* Fluid width that caps at 20rem */
+    width: min(90vw, 22rem); 
     background: var(--panel); 
     border: 1px solid var(--gold);
-    padding: 0.75rem; 
-    display: flex; 
-    align-items: center; 
-    gap: 0.75rem;
+    padding: 0.5rem; 
     z-index: 2000; 
     transition: 0.3s ease-in-out;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .audio-controller.hidden { transform: translateX(calc(100% - 3rem)); }
 
+.player-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.gramophone-icon { font-size: 1.2rem; }
+
 .audio-toggle { 
     background: none; 
-    border: none; 
+    border: 1px solid var(--dark-gold); 
     color: var(--gold); 
     font-family: 'Cinzel'; 
     font-size: 0.6rem; 
     cursor: pointer; 
+    padding: 2px 8px;
 }
 
-/* --- GALLERY GRID --- */
+/* --- GALLERY GRID & CARDS --- */
 .gallery-grid { 
     display: grid; 
-    /* Cards scale from 100% width on mobile to 20rem on desktop */
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); 
     gap: 2.5rem; 
     padding: 4vw; 
@@ -107,20 +128,13 @@ body {
 
 .card-content img { 
     width: 100%; 
-    aspect-ratio: 3 / 4; 
+    height: 350px;
     object-fit: cover; 
     border: 1px solid var(--dark-gold); 
-}
-
-/* --- DOSSIER MODAL OVERLAY --- */
-.card-content img {
-    width: 100%;
-    height: 350px; /* Fixed Height to prevent giant images */
-    object-fit: cover; /* Keeps aspect ratio clean */
-    border: 1px solid var(--dark-gold);
     margin-bottom: 15px;
 }
-  
+
+/* --- DOSSIER MODAL & PARCHMENT STYLE --- */
 .modal-overlay {
     display: none; 
     position: fixed;
@@ -134,231 +148,138 @@ body {
 
 .dossier-sheet {
     background: var(--paper);
-    color: #2b2b2b; /* Ink color */
+    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); 
+    color: #1a1a1a; 
     width: 95vw;
     max-width: 1200px;
     height: 90vh;
-    padding: 2rem;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    padding: 2.5rem;
+    border: 12px solid #2b2b2b; 
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.15);
 }
 
 .dossier-layout-triple { 
     display: grid; 
-    /* Sidebars collapse as screen gets smaller */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 280px 1fr 280px;
     gap: 2rem; 
     height: 100%; 
-    overflow-y: auto;
 }
 
-@media (min-width: 1024px) {
-    .dossier-layout-triple {
-        grid-template-columns: 280px 1fr 280px;
-        overflow: hidden;
-    }
+/* --- BIOGRAPHICAL DATA STYLING --- */
+.stat-block-regal {
+    margin-top: 1.5rem;
+    border-top: 2px double #2b2b2b;
+    padding-top: 1rem;
 }
 
+.stat-block-regal h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--accent);
+}
+
+.stat-row {
+    display: flex;
+    flex-direction: column; /* Stacked for better readability of long text */
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 0.3rem;
+}
+
+.stat-row span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.stat-row b {
+    font-family: 'IM Fell English', serif;
+    font-size: 1rem;
+    color: #1a1a1a;
+    word-wrap: break-word;
+}
+
+/* --- IMAGE FRAMES --- */
 .ornate-frame { 
     border: 5px solid #2b2b2b; 
     outline: 1px solid var(--gold); 
+    width: 100%;
     aspect-ratio: 3 / 4;
+    background: #000;
 }
 
-.ornate-frame img { width: 100%; height: 100%; object-fit: cover; }
+.ornate-frame img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* --- TEXT & CONTENT --- */
+.name-header {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    text-transform: uppercase;
+    border-bottom: 2px solid #2b2b2b;
+    margin: 0.5rem 0;
+}
+
+.class-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+}
 
 .scroll-area-regal { 
-    height: 100%; 
-    max-height: 400px;
+    height: calc(100% - 150px); 
     overflow-y: auto; 
     padding-right: 1rem; 
-    border-top: 1px solid var(--gold); 
     margin-top: 1rem; 
 }
 
-/* --- REGISTRATION FORM --- */
-.royal-form-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
+/* --- BUTTONS --- */
+.seal-btn, .regal-btn-red, .regal-btn-close {
+    width: 100%;
+    padding: 0.8rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+    border: 1px solid var(--gold);
+    margin-top: 10px;
 }
 
+.seal-btn { background: var(--gold); color: #000; font-weight: bold; }
+.regal-btn-red { background: #631919; color: #fff; border-color: #933b27; }
+.regal-btn-close { background: #1a1a1a; color: var(--gold); }
+
+.seal-btn:hover, .regal-btn-close:hover { background: #fff; color: #000; }
+
+/* --- FORM STYLING --- */
 .regal-input, .regal-textarea { 
     width: 100%; 
-    background: #000; 
+    background: #111; 
     border: 1px solid var(--dark-gold); 
     color: #fff; 
     padding: 0.8rem; 
-    margin-bottom: 0.75rem; 
+    margin-bottom: 10px; 
     font-family: inherit; 
 }
 
-.stat-input-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
-    gap: 0.5rem; 
-    margin-bottom: 1rem; 
-}
-
-.seal-btn { 
-    background: var(--gold); 
-    color: #000; 
-    border: none; 
-    padding: 1rem; 
-    width: 100%; 
-    font-family: 'Cinzel'; 
-    cursor: pointer; 
-    font-weight: bold;
-}
+.regal-textarea { height: 150px; resize: none; }
 
 /* --- SECTION MANAGEMENT --- */
-.site-section {
-    display: none;
-}
+.site-section { display: none; }
+.site-section.active { display: block; }
 
-.site-section.active {
-    display: block;
-}
-
-/* --- THE DOSSIER AESTHETIC UPGRADE --- */
-
-.dossier-sheet {
-    background: #e0d5c1; /* Aged Paper / Parchment */
-    /* Subtle paper grain texture */
-    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); 
-    color: #1a1a1a; /* Ink-black text */
-    border: 12px solid #2b2b2b; /* Thick "Registry" border */
-    position: relative;
-    box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.15);
-    overflow: hidden;
-}
-
-/* The "CLASSIFIED" Stamp flair */
-.dossier-sheet::after {
-    content: "REDACTION PENDING";
-    position: absolute;
-    bottom: 2rem;
-    right: -2rem;
-    transform: rotate(-15deg);
-    border: 3px solid rgba(147, 59, 39, 0.4);
-    color: rgba(147, 59, 39, 0.4);
-    font-family: 'Cinzel', serif;
-    padding: 0.5rem 1.5rem;
-    font-weight: bold;
-    pointer-events: none;
-}
-
-/* High-Stakes Redact Button */
-.regal-btn-red {
-    width: 100%;
-    background: #631919; /* Dark crimson */
-    color: #fff;
-    border: 1px solid var(--gold);
-    padding: 0.8rem;
-    margin-top: 1rem;
-    font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.regal-btn-red:hover {
-    background: #a12525; /* Brightens on hover */
-    box-shadow: 0 0 15px rgba(161, 37, 37, 0.6);
-}
-
-/* Bio Text Styling (Ink on Paper look) */
-.bio-text {
-    font-family: 'IM Fell English', serif;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    border-left: 3px solid #933b27;
-    padding-left: 1.5rem;
-    color: #2b2b2b;
-}
-
-.name-header {
-    font-size: 2.8rem;
-    text-transform: uppercase;
-    border-bottom: 2px solid #2b2b2b;
-    margin-bottom: 1rem;
-}
-
-/* High-Stakes Close Button (Matches Redact Style) */
-.regal-btn-close {
-    width: 100%;
-    background: #1a1a1a; /* Onyx Black */
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    padding: 0.8rem;
-    margin-top: 1rem;
-    font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-}
-
-.regal-btn-close:hover {
-    background: var(--gold);
-    color: #000;
-    box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
-    transform: scale(1.02); /* Adds a tactile "pop" on hover */
-}
-
-/* --- FORM PREVIEW LOGIC --- */
-
-/* This handles the 2-column layout for the upload area */
-.form-layout {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap; /* Allows stacking on mobile */
-    margin-bottom: 2rem;
-}
-
-.upload-column {
-    flex: 1;
-    min-width: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* The actual "Slot" for the image */
-.preview-frame {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    border: 2px dashed var(--dark-gold); /* Dashed lines look like a placeholder */
-    background: rgba(0,0,0,0.3);
-    margin-bottom: 1rem;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.preview-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* The button that triggers the file upload */
-.custom-upload-btn {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: 0.3s;
-    text-align: center;
-}
-
-.custom-upload-btn:hover {
-    background: var(--gold);
-    color: #000;
-}
+/* Custom Scrollbar for the Archive look */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--dark-gold); }
