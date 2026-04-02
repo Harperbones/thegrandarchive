@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE GRAND ARCHIVE | Registry</title>
     <link href="style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  
 <header class="royal-header">
     <div class="header-content">
         <div class="logo-group">
@@ -25,7 +25,7 @@
 <div class="audio-controller" id="archive-player">
     <div id="global-player-box">
         <iframe id="bg-spotify" 
-                src="https://open.spotify.com/embed/playlist/4?utm_source=generator&theme=0" 
+                src="about:blank" 
                 width="100%" height="80" frameBorder="0" 
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
         </iframe>
@@ -58,7 +58,7 @@
                 <div class="form-layout">
                     <div class="upload-column">
                         <div class="preview-frame">
-                            <img id="form-preview" src="michelangelo.jpg" alt="Preview">
+                            <img id="form-preview" src="placeholder.jpg" alt="Preview">
                         </div>
                         <label for="new-portrait" class="custom-upload-btn">📜 Affix Portrait</label>
                         <input type="file" id="new-portrait" accept="image/*" style="display:none">
@@ -67,13 +67,13 @@
                     <div class="input-column">
                         <input type="text" id="new-name" class="regal-input" placeholder="Full Name / Designation" required>
                         <input type="text" id="new-class" class="regal-input" placeholder="Classification (e.g. SCP-Class, Race)">
-                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Vibe Link">
+                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Playlist Link">
                         
-                        <div class="stat-input-grid">
-                            <input type="number" id="in-str" placeholder="STR">
-                            <input type="number" id="in-dex" placeholder="DEX">
-                            <input type="number" id="in-int" placeholder="INT">
-                            <input type="number" id="in-cha" placeholder="CHA">
+                        <div class="stat-input-grid" style="grid-template-columns: 1fr;">
+                            <input type="text" id="in-age" class="regal-input" placeholder="Age">
+                            <input type="text" id="in-bday" class="regal-input" placeholder="Birthday">
+                            <input type="text" id="in-source" class="regal-input" placeholder="Where they are a character in...">
+                            <input type="text" id="in-extra" class="regal-input" placeholder="Extra Details">
                         </div>
 
                         <div class="mood-inputs">
@@ -87,7 +87,7 @@
                 
                 <div class="form-footer">
                     <button type="submit" class="seal-btn">SEAL RECORD</button>
-                    <button type="button" class="cancel-btn" onclick="showSection('gallery')">Discard Draft</button>
+                    <button type="button" class="regal-btn-close" onclick="showSection('gallery')">Discard Draft</button>
                 </div>
             </form>
         </div>
@@ -100,12 +100,13 @@
             <div class="dossier-layout-triple">
                 <div class="dossier-col-left">
                     <div class="ornate-frame"><img id="view-img" src="" alt="Portrait"></div>
+                    
                     <div class="stat-block-regal">
-                        <h3>ATTRIBUTES</h3>
-                        <div class="stat-row"><span>STR</span><b id="view-str">-</b></div>
-                        <div class="stat-row"><span>DEX</span><b id="view-dex">-</b></div>
-                        <div class="stat-row"><span>INT</span><b id="view-int">-</b></div>
-                        <div class="stat-row"><span>CHA</span><b id="view-cha">-</b></div>
+                        <h3>BIOGRAPHICAL DATA</h3>
+                        <div class="stat-row"><span>AGE</span><b id="view-age">-</b></div>
+                        <div class="stat-row"><span>BIRTHDAY</span><b id="view-bday">-</b></div>
+                        <div class="stat-row"><span>SOURCE</span><b id="view-source">-</b></div>
+                        <div class="stat-row"><span>EXTRA</span><b id="view-extra">-</b></div>
                     </div>
                 </div>
 
@@ -121,16 +122,15 @@
                     <div class="mood-section">
                         <h3>AESTHETIC ARCHIVE</h3>
                         <div class="mood-frame">
-                            <iframe id="mood-iframe" src="moodboard.html"></iframe>
+                            <iframe id="mood-iframe" src="about:blank"></iframe>
                         </div>
                     </div>
                     
                     <div class="links-section">
-    <h3>ARCHIVE ACTIONS</h3>
-    <button class="regal-btn-close" onclick="closeDossier()">✖ CLOSE FILE</button>
-    
-    <button id="redact-btn" class="regal-btn-red">⚠️ REDACT RECORD</button>
-</div>
+                        <h3>ARCHIVE ACTIONS</h3>
+                        <button class="regal-btn-close" onclick="closeDossier()">✖ CLOSE FILE</button>
+                        <button id="redact-btn" class="regal-btn-red">⚠️ REDACT RECORD</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,7 +138,14 @@
 
 </main>
 
-  
+  <iframe id="bg-spotify" 
+        src="about:blank" 
+        width="100%" height="80" 
+        frameBorder="0" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+</iframe>
+
 <script src="script.js"></script>
 </body>
 </html>
