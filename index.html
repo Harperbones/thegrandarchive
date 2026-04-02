@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE GRAND ARCHIVE | Registry</title>
     <link href="style.css" rel="stylesheet" />
 </head>
@@ -20,50 +21,72 @@
     </div>
 </header>
 
-<div class="audio-controller">
-    <div class="gramophone-icon" onclick="toggleAudio()">📻</div>
+<div class="audio-controller" id="archive-player">
     <div id="global-player-box">
-        <iframe id="bg-spotify" src="" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <iframe id="bg-spotify" 
+                src="https://open.spotify.com/embed/playlist/4?utm_source=generator&theme=0" 
+                width="100%" height="80" frameBorder="0" 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+        </iframe>
     </div>
-    <button class="audio-toggle" onclick="toggleAudio()">Hide Player</button>
+    <div class="player-controls">
+        <span class="gramophone-icon">📻</span>
+        <button class="audio-toggle" onclick="toggleAudio()">Minimize Player</button>
+    </div>
 </div>
 
 <main class="main-container">
+    
     <section id="gallery" class="site-section active">
         <div class="archive-header">
             <input type="text" id="archive-search" class="regal-search" placeholder="Search the collection..." onkeyup="searchArchive()">
         </div>
-        <div class="gallery-grid" id="character-hub"></div>
+        <div class="gallery-grid" id="character-hub">
+            </div>
     </section>
 
     <section id="submit" class="site-section">
         <div class="royal-form-container">
+            <div class="form-header">
+                <h2>New Entry Registration</h2>
+                <p>Ensure all data is accurate before sealing the record.</p>
+            </div>
             <form id="oc-form">
                 <input type="hidden" id="editing-id" value="">
+                
                 <div class="form-layout">
                     <div class="upload-column">
-                        <div class="preview-frame"><img id="form-preview" src="michelangelo.jpg"></div>
+                        <div class="preview-frame">
+                            <img id="form-preview" src="michelangelo.jpg" alt="Preview">
+                        </div>
                         <label for="new-portrait" class="custom-upload-btn">📜 Affix Portrait</label>
                         <input type="file" id="new-portrait" accept="image/*" style="display:none">
                     </div>
+
                     <div class="input-column">
-                        <input type="text" id="new-name" class="regal-input" placeholder="Full Name" required>
-                        <input type="text" id="new-class" class="regal-input" placeholder="Category (SCP, D&D, Mabinogi)">
-                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Track/Playlist Link">
+                        <input type="text" id="new-name" class="regal-input" placeholder="Full Name / Designation" required>
+                        <input type="text" id="new-class" class="regal-input" placeholder="Classification (e.g. SCP-Class, Race)">
+                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Vibe Link">
+                        
                         <div class="stat-input-grid">
-                            <input type="number" id="in-str" placeholder="STR"><input type="number" id="in-dex" placeholder="DEX">
-                            <input type="number" id="in-int" placeholder="INT"><input type="number" id="in-cha" placeholder="CHA">
+                            <input type="number" id="in-str" placeholder="STR">
+                            <input type="number" id="in-dex" placeholder="DEX">
+                            <input type="number" id="in-int" placeholder="INT">
+                            <input type="number" id="in-cha" placeholder="CHA">
                         </div>
+
                         <div class="mood-inputs">
-                            <input type="text" id="new-mood1" class="regal-input" placeholder="Mood Image URL 1">
-                            <input type="text" id="new-mood2" class="regal-input" placeholder="Mood Image URL 2">
+                            <input type="text" id="new-mood1" class="regal-input" placeholder="Mood Image 1 URL">
+                            <input type="text" id="new-mood2" class="regal-input" placeholder="Mood Image 2 URL">
                         </div>
                     </div>
                 </div>
-                <textarea id="new-bio" class="regal-textarea" placeholder="Detailed History..."></textarea>
+
+                <textarea id="new-bio" class="regal-textarea" placeholder="Detailed History and Biological Notes..."></textarea>
+                
                 <div class="form-footer">
                     <button type="submit" class="seal-btn">SEAL RECORD</button>
-                    <button type="button" class="cancel-btn" onclick="showSection('gallery')">Discard</button>
+                    <button type="button" class="cancel-btn" onclick="showSection('gallery')">Discard Draft</button>
                 </div>
             </form>
         </div>
@@ -72,9 +95,10 @@
     <div id="dossier-overlay" class="modal-overlay" onclick="closeDossier()">
         <div class="dossier-sheet" onclick="event.stopPropagation()">
             <button class="close-top" onclick="closeDossier()">✕</button>
+            
             <div class="dossier-layout-triple">
                 <div class="dossier-col-left">
-                    <div class="ornate-frame"><img id="view-img" src=""></div>
+                    <div class="ornate-frame"><img id="view-img" src="" alt="Portrait"></div>
                     <div class="stat-block-regal">
                         <h3>ATTRIBUTES</h3>
                         <div class="stat-row"><span>STR</span><b id="view-str">-</b></div>
@@ -83,11 +107,15 @@
                         <div class="stat-row"><span>CHA</span><b id="view-cha">-</b></div>
                     </div>
                 </div>
+
                 <div class="dossier-col-center">
                     <h2 id="view-class" class="class-label">CLASSIFICATION</h2>
                     <h1 id="view-name" class="name-header">NAME</h1>
-                    <div class="scroll-area-regal"><p id="view-bio" class="bio-text"></p></div>
+                    <div class="scroll-area-regal">
+                        <p id="view-bio" class="bio-text"></p>
+                    </div>
                 </div>
+
                 <div class="dossier-col-right">
                     <div class="mood-section">
                         <h3>AESTHETIC ARCHIVE</h3>
@@ -95,15 +123,18 @@
                             <iframe id="mood-iframe" src="moodboard.html"></iframe>
                         </div>
                     </div>
+                    
                     <div class="links-section">
                         <h3>REGISTRY ACCESS</h3>
-                        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT</button>
+                        <button class="regal-btn-small" onclick="sendToDiscord()">📤 TRANSMIT DATA</button>
+                        <button class="regal-btn-small" onclick="closeDossier()">✖ CLOSE FILE</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
 <script src="script.js"></script>
 </body>
 </html>
