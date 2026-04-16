@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE GRAND ARCHIVE | Registry</title>
-    <link href="style.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2family=Cinzel:wght@400;700&family=IM+Fell+English&display=swap" rel="stylesheet">
+  <link href="style.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -22,28 +22,13 @@
     </div>
 </header>
 
-<div class="audio-controller" id="archive-player">
-    <div id="global-player-box">
-        <iframe id="bg-spotify" 
-                src="about:blank" 
-                width="100%" height="80" frameBorder="0" 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-        </iframe>
-    </div>
-    <div class="player-controls">
-        <span class="gramophone-icon">📻</span>
-        <button class="audio-toggle" onclick="toggleAudio()">Minimize Player</button>
-    </div>
-</div>
-
 <main class="main-container">
     
     <section id="gallery" class="site-section active">
         <div class="archive-header">
-            <input type="text" id="archive-search" class="regal-search" placeholder="Search the collection..." onkeyup="searchArchive()">
+            <input type="text" id="archive-search" class="regal-search" placeholder="Search the Registry..." onkeyup="searchArchive()">
         </div>
-        <div class="gallery-grid" id="character-hub">
-            </div>
+        <div class="gallery-grid" id="character-hub"></div>
     </section>
 
     <section id="submit" class="site-section">
@@ -67,7 +52,6 @@
                     <div class="input-column">
                         <input type="text" id="new-name" class="regal-input" placeholder="Full Name / Designation" required>
                         <input type="text" id="new-class" class="regal-input" placeholder="Classification (e.g. SCP-Class, Race)">
-                        <input type="text" id="new-spotify" class="regal-input" placeholder="Spotify Playlist Link">
                         
                         <div class="stat-input-grid" style="grid-template-columns: 1fr;">
                             <input type="text" id="in-age" class="regal-input" placeholder="Age">
@@ -135,16 +119,7 @@
             </div>
         </div>
     </div>
-
 </main>
-
-  <iframe id="bg-spotify" 
-        src="about:blank" 
-        width="100%" height="80" 
-        frameBorder="0" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-        loading="lazy">
-</iframe>
 
 <script src="script.js"></script>
 </body>
