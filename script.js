@@ -8,11 +8,6 @@ function showSection(id) {
     if (target) target.classList.add('active');
 }
 
-// --- AUDIO CONTROLLER ---
-function toggleAudio() {
-    document.querySelector('.audio-controller').classList.toggle('hidden');
-}
-
 // --- OPEN DOSSIER (VIEWING MODE) ---
 function openDossier(index) {
     const char = characters[index];
@@ -23,30 +18,19 @@ function openDossier(index) {
     document.getElementById('view-bio').innerText = char.bio;
     document.getElementById('view-img').src = char.img || 'placeholder.jpg';
     
-    // NEW BIOGRAPHICAL DATA (Replacing Stats)
+    // BIOGRAPHICAL DATA
     document.getElementById('view-age').innerText = char.age || "-";
     document.getElementById('view-bday').innerText = char.birthday || "-";
     document.getElementById('view-source').innerText = char.source || "-";
     document.getElementById('view-extra').innerText = char.extra || "-";
 
-    // Moodboard PostMessage Update
+    // Moodboard Update
     const moodIframe = document.getElementById('mood-iframe');
     if (moodIframe && moodIframe.contentWindow) {
         moodIframe.contentWindow.postMessage({ images: [char.mood1, char.mood2] }, "*");
     }
 
-    // SPOTIFY PLAYLIST LOGIC
-    const player = document.getElementById('bg-spotify');
-    if (char.spotify && player) {
-        // Automatically converts standard links to Embed links
-        let embedUrl = char.spotify
-            .replace("open.spotify.com", "open.spotify.com/embed")
-            .split('?')[0]; // Removes tracking junk from the URL
-        
-        player.src = `${embedUrl}?utm_source=generator&theme=0`;
-    }
-
-    // Redact Button logic (Linked to this specific index)
+    // Redact Button logic
     const redactBtn = document.getElementById('redact-btn');
     if (redactBtn) {
         redactBtn.onclick = () => redactRecord(index);
@@ -63,11 +47,9 @@ document.getElementById('oc-form').onsubmit = function(e) {
         name: document.getElementById('new-name').value,
         class: document.getElementById('new-class').value,
         bio: document.getElementById('new-bio').value,
-        spotify: document.getElementById('new-spotify').value,
         mood1: document.getElementById('new-mood1').value,
         mood2: document.getElementById('new-mood2').value,
         img: currentImageData,
-        // Saving the new bio fields
         age: document.getElementById('in-age').value,
         birthday: document.getElementById('in-bday').value,
         source: document.getElementById('in-source').value,
@@ -77,9 +59,8 @@ document.getElementById('oc-form').onsubmit = function(e) {
     characters.push(charData);
     localStorage.setItem('user_archive', JSON.stringify(characters));
     
-    // Reset Form & Return to Gallery
     this.reset();
-    currentImageData = "placeholder.jpg"; // Reset image tracker
+    currentImageData = "placeholder.jpg"; 
     document.getElementById('form-preview').src = "placeholder.jpg"; 
     
     showSection('gallery');
@@ -107,12 +88,26 @@ function renderGallery() {
     });
 }
 
-// --- CLOSE OVERLAY ---
+// --- SEARCH LOGIC ---
+function searchArchive() {
+    const query = document.getElementById('archive-search').value.toLowerCase();
+    const cards = document.querySelectorAll('.char-card');
+    
+    cards.forEach((card, index) => {
+        const name = characters[index].name.toLowerCase();
+        const classification = (characters[index].class || "").toLowerCase();
+        if (name.includes(query) || classification.includes(query)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
 function closeDossier() { 
     document.getElementById('dossier-overlay').style.display = 'none'; 
 }
 
-// --- IMAGE UPLOAD PREVIEW ---
 document.getElementById('new-portrait').addEventListener('change', function(e) {
     const reader = new FileReader();
     if (e.target.files[0]) {
@@ -124,9 +119,8 @@ document.getElementById('new-portrait').addEventListener('change', function(e) {
     }
 });
 
-// --- PERMANENT REDACTION ---
 function redactRecord(index) {
-    if (confirm("Are you sure you wish to PERMANENTLY REDACT this file? This cannot be undone.")) {
+    if (confirm("Are you sure you wish to PERMANENTLY REDACT this file?")) {
         characters.splice(index, 1);
         localStorage.setItem('user_archive', JSON.stringify(characters));
         closeDossier();
@@ -134,23 +128,4 @@ function redactRecord(index) {
     }
 }
 
-// --- Inside openDossier(index) ---
-const player = document.getElementById('bg-spotify');
-
-if (char.spotify && player) {
-    let url = char.spotify;
-
-    // Convert standard links (open.spotify.com) to embed links
-    if (url.includes("open.spotify.com")) {
-        // This converts /track/, /playlist/, or /album/ into the /embed/ version
-        url = url.replace("/track/", "/embed/track/")
-                 .replace("/playlist/", "/embed/playlist/")
-                 .replace("/album/", "/embed/album/");
-    }
-
-    // Apply to player and add theme/source parameters
-    player.src = `${url}?utm_source=generator&theme=0`;
-}
-
-// Initialize the Gallery on Load
 window.onload = renderGallery;
